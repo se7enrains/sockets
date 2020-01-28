@@ -22,12 +22,9 @@ void sendSocket(tcp::socket &socket, const string &message){
 }
 
 int main() {
-    std::cout << "Enter absolute path to config: ";
-    string configPath;
-    std::getline(std::cin, configPath, '\n');
     Config cfg;
     try{
-        cfg.readFile(configPath.c_str());
+        cfg.readFile("./server.cfg");
     }
     catch (const FileIOException &fioex){
         std::cerr << "I/O error while reading file" << std::endl;
