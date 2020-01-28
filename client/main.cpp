@@ -10,7 +10,7 @@ int main() {
     tcp::socket socket(ioService);
     socket.connect(tcp::endpoint(
             ip::address::from_string("127.0.0.1"), 61324));
-    std::string message = "";
+    std::string message;
     std::cout << "Enter message: ";
     std::getline(std::cin, message, '\n');
     message.append("\n");
@@ -23,11 +23,11 @@ int main() {
     streambuf receive_buffer;
     read(socket, receive_buffer, transfer_all(), error);
     if (error && error != error::eof)
-        std::cout << "Recieve failed" << error.message() << std::endl;
+        std::cout << "Receive failed" << error.message() << std::endl;
     else{
         const char* data = buffer_cast<const char *>(receive_buffer.data());
-        std::cout << "Recieved: " << data << std::endl;
-        if (message.compare(data) == 0)
+        std::cout << "Received: " << data << std::endl;
+        if (message == data)
             std::cout << "Messages are equal" << std::endl;
     }
     
