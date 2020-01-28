@@ -1,6 +1,8 @@
 #include <iostream>
 #include <boost/asio.hpp>
+#include <libconfig.h++>
 
+using namespace libconfig;
 using namespace boost::asio;
 using ip::tcp;
 using std::string;
@@ -20,8 +22,30 @@ void sendSocket(tcp::socket &socket, const string &message){
 }
 
 int main() {
+    Config cfg;
+    try{
+        cfg.readFile("./server.cfg");
+    }
+    catch (const FileIOException &fioex){
+        std::cerr << "I/O error while reading file" << std::endl;
+        return EXIT_FAILURE;
+    }
+    catch (const ParseException &pex){
+        std::cerr << "Parse exception at " << pex.getFile() << ":" << pex.getLine()
+                  << " - " << pex.getError() << std::endl;
+        return EXIT_FAILURE;
+    }
+    string ip, port;
+    try{
+        ip.assign(cfg.lookup("server.ip").c_str());
+        port.assign(cfg.lookup("server.port").c_str());
+    }
+    catch(const SettingNotFoundException &snfex){
+        std::cerr << "No \"ip\" or \"port\" value in configuration file" << std::endl;
+        return EXIT_FAILURE;
+    }
     io_service ioService;
-    tcp::acceptor acceptor(ioService, tcp::endpoint(tcp::v4(), 61324));
+    tcp::acceptor acceptor(ioService, tcp::endpoint(ip::address::from_string(ip), std::stoi(port)));
     tcp::socket  socket(ioService);
     string promptResult;
     bool continueFlag = true;

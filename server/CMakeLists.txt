@@ -16,6 +16,11 @@ else()
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
+FIND_LIBRARY(LIBCONFIGPP_LIBRARY config++
+        /usr/local/lib
+        /usr/lib
+        )
+
 add_executable(server main.cpp)
 
-target_link_libraries(server ${Boost_LIBRARIES})
+target_link_libraries(server ${Boost_LIBRARIES} ${LIBCONFIGPP_LIBRARY})
