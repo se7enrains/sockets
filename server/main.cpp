@@ -22,9 +22,12 @@ void sendSocket(tcp::socket &socket, const string &message){
 }
 
 int main() {
+    std::cout << "Enter absolute path to config: ";
+    string configPath;
+    std::getline(std::cin, configPath, '\n');
     Config cfg;
     try{
-        cfg.readFile("server.cfg");
+        cfg.readFile(configPath.c_str());
     }
     catch (const FileIOException &fioex){
         std::cerr << "I/O error while reading file" << std::endl;
@@ -35,16 +38,17 @@ int main() {
                   << " - " << pex.getError() << std::endl;
         return EXIT_FAILURE;
     }
+    string ip, port;
     try{
-        string ip = cfg.lookup("server.ip");
-        std::cout << "server.ip = " << ip << std::endl;
+        ip.assign(cfg.lookup("server.ip").c_str());
+        port.assign(cfg.lookup("server.port").c_str());
     }
-    catch(const SettingNotFoundException &snfec){
-        std::cerr << "No \"ip\" value in configuration file" << std::endl;
+    catch(const SettingNotFoundException &snfex){
+        std::cerr << "No \"ip\" or \"port\" value in configuration file" << std::endl;
         return EXIT_FAILURE;
     }
     io_service ioService;
-    tcp::acceptor acceptor(ioService, tcp::endpoint(tcp::v4(), 61324));
+    tcp::acceptor acceptor(ioService, tcp::endpoint(ip::address::from_string(ip), std::stoi(port)));
     tcp::socket  socket(ioService);
     string promptResult;
     bool continueFlag = true;
