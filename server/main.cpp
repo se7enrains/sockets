@@ -19,21 +19,18 @@ void sendSocket(tcp::socket &socket, const string &message){
 
 int main() {
     io_service ioService;
-    tcp::acceptor acceptor(ioService, tcp::endpoint(tcp::v4(), 1234));
+    tcp::acceptor acceptor(ioService, tcp::endpoint(tcp::v4(), 61324));
     tcp::socket  socket(ioService);
-    string promptResult = "";
+    string promptResult;
     bool continueFlag = true;
-    while (continueFlag == true) {
+    while (continueFlag) {
         acceptor.accept(socket);
         string message = readSocket(socket);
         std::cout << "Got message: " << message << std::endl;
         sendSocket(socket, message);
         std::cout << "Continue listening? [Y/N]" << std::endl;
         std::cin >> promptResult;
-        if (message.compare("Y") == 0)
-            continueFlag = true;
-        else
-            continueFlag = false;
+        continueFlag = promptResult == "Y";
     }
     std::cout << "Finishing work" << std::endl;
 
