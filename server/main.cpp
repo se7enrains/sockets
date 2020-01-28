@@ -13,7 +13,9 @@ string readSocket(tcp::socket &socket){
 }
 
 void sendSocket(tcp::socket &socket, const string &message){
-    const string msg = message + '\n';
+    string msg = message;
+    if (msg.back() != '\n')
+        msg += '\n';
     write(socket, buffer(msg));
 }
 

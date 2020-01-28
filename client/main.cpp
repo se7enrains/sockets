@@ -21,7 +21,7 @@ int main() {
     else
         std::cout << "Send failed" << std::endl;
     streambuf receive_buffer;
-    read(socket, receive_buffer, transfer_all(), error);
+    read_until(socket, receive_buffer,'\n');
     if (error && error != error::eof)
         std::cout << "Receive failed" << error.message() << std::endl;
     else{
