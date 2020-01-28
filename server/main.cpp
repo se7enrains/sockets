@@ -28,6 +28,8 @@ int main() {
         string message = readSocket(socket);
         std::cout << "Got message: " << message << std::endl;
         sendSocket(socket, message);
+        socket.close();
+
         std::cout << "Continue listening? [Y/N]" << std::endl;
         std::cin >> promptResult;
         continueFlag = promptResult == "Y";
