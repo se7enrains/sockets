@@ -1,11 +1,14 @@
 #include <iostream>
 #include <boost/asio.hpp>
+#include <boost/thread.hpp>
 #include <libconfig.h++>
 
 using namespace libconfig;
 using namespace boost::asio;
 using ip::tcp;
 using std::string;
+
+typedef boost::shared_ptr<ip::tcp::socket> socket_ptr;
 
 string readSocket(tcp::socket &socket){
     streambuf buf;
@@ -20,6 +23,14 @@ void sendSocket(tcp::socket &socket, const string &message){
         msg += '\n';
     write(socket, buffer(msg));
 }
+
+
+void client_session(const socket_ptr& socket){
+    string message = readSocket(*socket);
+    sendSocket(*socket, message);
+    socket->close();
+}
+
 
 int main() {
     Config cfg;
@@ -44,23 +55,18 @@ int main() {
         std::cerr << "No \"ip\" or \"port\" value in configuration file" << std::endl;
         return EXIT_FAILURE;
     }
+
     io_service ioService;
-    tcp::acceptor acceptor(ioService, tcp::endpoint(ip::address::from_string(ip), std::stoi(port)));
-    tcp::socket  socket(ioService);
-    string promptResult;
-    bool continueFlag = true;
-    while (continueFlag) {
-        acceptor.accept(socket);
-        string message = readSocket(socket);
-        std::cout << "Got message: " << message << std::endl;
-        sendSocket(socket, message);
-        socket.close();
-
-        std::cout << "Continue listening? [Y/N]" << std::endl;
-        std::cin >> promptResult;
-        continueFlag = promptResult == "Y";
+    tcp::acceptor acceptor(ioService,
+                           tcp::endpoint(ip::address::from_string(ip),
+                                   std::stoi(port)));
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
+    while (true) {
+        socket_ptr socket(new ip::tcp::socket(ioService));
+        acceptor.accept(*socket);
+        boost::thread(boost::bind(client_session, socket));
     }
-    std::cout << "Finishing work" << std::endl;
-
+#pragma clang diagnostic pop
     return 0;
 }
