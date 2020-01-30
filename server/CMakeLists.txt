@@ -21,6 +21,6 @@ FIND_LIBRARY(LIBCONFIGPP_LIBRARY config++
         /usr/lib
         )
 
-add_executable(server main.cpp)
+add_executable(server main.cpp server.cpp server.h confighandler.cpp confighandler.h)
 
 target_link_libraries(server ${Boost_LIBRARIES} ${LIBCONFIGPP_LIBRARY})
