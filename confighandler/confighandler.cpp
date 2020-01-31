@@ -12,7 +12,7 @@ string ConfigHandler::getError() {
     return error;
 }
 
-ConfigHandler::ConfigHandler(string path) {
+ConfigHandler::ConfigHandler(const string& path) {
     try{
         cfg.readFile(path.c_str());
     }
@@ -55,8 +55,4 @@ string ConfigHandler::getPort() {
         }
     }
     return "";
-}
-
-void ConfigHandler::closeFile() {
-
 }

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "server.h"
-#include "confighandler.h"
+#include "../confighandler/confighandler.h"
 
 using std::string;
 

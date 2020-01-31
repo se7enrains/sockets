@@ -14,16 +14,14 @@ using std::string;
 class ConfigHandler {
 private:
     Config cfg;
-    string filePath;
     bool ok;
     string error;
 public:
     bool isOk();
     string getError();
-    explicit ConfigHandler(string path);
+    explicit ConfigHandler(const string& path);
     string getIp();
     string getPort();
-    void closeFile();
 };
 
 

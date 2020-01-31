@@ -2,6 +2,7 @@
 #define SERVER_SERVER_H
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
+#include <iostream>
 
 using namespace boost::asio;
 using ip::tcp;

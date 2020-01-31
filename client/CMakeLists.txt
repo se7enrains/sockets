@@ -15,11 +15,8 @@ else()
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
-FIND_LIBRARY(LIBCONFIGPP_LIBRARY config++
-        /usr/local/lib
-        /usr/lib
-        )
+include_directories(../confighandler)
 
-add_executable(client main.cpp)
+add_executable(client main.cpp client.cpp client.h)
 
-target_link_libraries(client ${Boost_LIBRARIES} ${LIBCONFIGPP_LIBRARY})
+target_link_libraries(client ${Boost_LIBRARIES} confighandler)
