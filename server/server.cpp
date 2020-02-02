@@ -38,7 +38,7 @@ void Server::run() {
     while(true) {
         socket_ptr socket(new ip::tcp::socket(ioContext));
         acceptor.accept(*socket);
-        boost::thread(boost::bind(startClientSession, socket));
+        boost::thread(&Server::startClientSession, this, socket);
     }
 }
 

@@ -14,9 +14,9 @@ private:
     string ip;
     int port;
     typedef boost::shared_ptr<ip::tcp::socket> socket_ptr;
-    static string readSocket(tcp::socket &socket);
-    static void sendSocket(tcp::socket &socket, const string &message);
-    static void startClientSession(const socket_ptr& socket);
+    string readSocket(tcp::socket &socket);
+    void sendSocket(tcp::socket &socket, const string &message);
+    void startClientSession(const socket_ptr& socket);
 public:
     Server(string ip, int port);
     void run();
