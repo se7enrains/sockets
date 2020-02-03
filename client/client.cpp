@@ -4,9 +4,8 @@
 
 #include "client.h"
 
-#include <utility>
-
-Client::Client(string ip, int port) : ip(std::move(ip)), port(port) { }
+Client::Client(string ip, int port) : ip(std::move(ip)), port(port) {
+}
 
 string Client::readSocket(tcp::socket &socket) {
     streambuf buf;
@@ -22,8 +21,8 @@ void Client::sendSocket(tcp::socket &socket, const string &message) {
     write(socket, buffer(msg), error);
 }
 
-void Client::run() {boost::asio::io_service ioService;
-    tcp::socket socket(ioService);
+void Client::run() {
+    tcp::socket socket(ioContext);
     socket.connect(tcp::endpoint(
             ip::address::from_string(ip), port), error);
     if (error){

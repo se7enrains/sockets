@@ -2,6 +2,7 @@
 #define SOCKETS_CLIENT_H
 #include <boost/asio.hpp>
 #include <iostream>
+#include <utility>
 
 using namespace boost::asio;
 using ip::tcp;
