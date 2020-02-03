@@ -1,7 +1,5 @@
 #include "server.h"
 
-#include <utility>
-
 string Server::readSocket(tcp::socket &socket) {
     streambuf buf;
     boost::system::error_code error;

@@ -3,6 +3,7 @@
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <iostream>
+#include <utility>
 
 using namespace boost::asio;
 using ip::tcp;
